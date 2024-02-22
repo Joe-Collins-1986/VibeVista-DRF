@@ -1,11 +1,11 @@
 from rest_framework import serializers
-from .models import Account
+from .models import UserProfile
 
 
 
-class AccountSerializer(serializers.ModelSerializer):
+class UserProfileSerializer(serializers.ModelSerializer):
     """
-    Serializer for the Account model
+    Serializer for the UserProfile model
     Owner shows object owner's username in readonly format
     Get function to set is_owner to true/false
     """
@@ -19,9 +19,9 @@ class AccountSerializer(serializers.ModelSerializer):
         return request.user == obj.owner
 
     class Meta:
-        model = Account
+        model = UserProfile
         fields = [
             'is_owner', 'id', 'owner',
-            'bio', 'image',
+            'created_at', 'bio', 'image',
             'created_at',
         ]

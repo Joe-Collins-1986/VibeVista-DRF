@@ -4,9 +4,9 @@ from django.contrib.auth.models import User
 from django_resized import ResizedImageField
 
 
-class Account(models.Model):
+class UserProfile(models.Model):
     """
-    Account Model:
+    UserProfile Model:
     1:2:1 Key - User
     """
     owner = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -24,15 +24,15 @@ class Account(models.Model):
         ordering = ['-created_at']
 
     def save(self, *args, **kwargs):
-        super(Account, self).save(*args, **kwargs)
+        super(UserProfile, self).save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.owner}'s account"
+        return f"{self.owner}'s user profile"
 
 
 def create_account(sender, instance, created, **kwargs):
     if created:
-        Account.objects.create(owner=instance)
+        UserProfile.objects.create(owner=instance)
 
 
 post_save.connect(create_account, sender=User)

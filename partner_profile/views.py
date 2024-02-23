@@ -1,14 +1,14 @@
 from rest_framework import generics
-from main.permissions import IsOwnerOrReadOnly
+from main.permissions import IsPrimaryProfileOrReadOnly
 from .models import PartnerProfile
-from .serializers import PartnerProfileSerializer
+from .serializers import PartnerProfileListSerializer, PartnerProfileDetailSerializer
 
 
-class PartnerProfileList(generics.ListAPIView):
+class PartnerProfileList(generics.ListCreateAPIView):
     """
     - List out all the partner profiles
     """
-    serializer_class = PartnerProfileSerializer
+    serializer_class = PartnerProfileListSerializer
     queryset = PartnerProfile.objects.all().order_by('-created_at')
     
 
@@ -19,6 +19,6 @@ class PartnerProfileDetail(generics.RetrieveUpdateAPIView):
     - Uses IsOwnerOrReadOnly tailored permission class
     to ensure only owner can update partner profile info
     """
-    serializer_class = PartnerProfileSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+    serializer_class = PartnerProfileDetailSerializer
+    permission_classes = [IsPrimaryProfileOrReadOnly]
     queryset = PartnerProfile.objects.all().order_by('-created_at')

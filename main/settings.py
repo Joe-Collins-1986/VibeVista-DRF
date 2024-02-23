@@ -83,6 +83,7 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'user_profile',
+    'partner_profile',
 
 ]
 

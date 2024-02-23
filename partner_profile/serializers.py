@@ -5,12 +5,18 @@ from characteristics.serializers import CharacteristicSerializer
 
 class PartnerProfileListSerializer(serializers.ModelSerializer):
     characteristics = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=Characteristic.objects.all(), required=False)
+        many=True, queryset=Characteristic.objects.all(), write_only=True, required=False)
     characteristics_display = CharacteristicSerializer(many=True, read_only=True, source='characteristics')
+
+    is_primary_profile = serializers.SerializerMethodField()
+
+    def get_is_primary_profile(self, obj):
+        request = self.context['request']
+        return request.user == obj.primary_profile
 
     class Meta:
         model = PartnerProfile
-        fields = ['id', 'primary_profile', 'name', 'about', 'image', 'created_at', 'characteristics', 'characteristics_display']
+        fields = ['is_primary_profile', 'id', 'primary_profile', 'name', 'about', 'image', 'created_at', 'characteristics', 'characteristics_display']
         
 
 class PartnerProfileDetailSerializer(serializers.ModelSerializer):

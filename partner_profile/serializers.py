@@ -2,11 +2,17 @@ from rest_framework import serializers
 from .models import PartnerProfile
 from characteristics.models import Characteristic
 from characteristics.serializers import CharacteristicSerializer
+from likes.models import Like
+from likes.serializers import LikeSerializer
 
 class PartnerProfileListSerializer(serializers.ModelSerializer):
     characteristics = serializers.PrimaryKeyRelatedField(
         many=True, queryset=Characteristic.objects.all(), write_only=True, required=False)
     characteristics_display = CharacteristicSerializer(many=True, read_only=True, source='characteristics')
+
+    likes = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=Like.objects.all(), write_only=True, required=False)
+    likes_display = LikeSerializer(many=True, read_only=True, source='likes')
 
     is_primary_profile = serializers.SerializerMethodField()
 
@@ -16,24 +22,35 @@ class PartnerProfileListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PartnerProfile
-        fields = ['is_primary_profile', 'id', 'primary_profile', 'name', 'about', 'image', 'created_at', 'characteristics', 'characteristics_display']
+        fields = ['is_primary_profile', 'id', 'primary_profile',
+                  'name', 'about', 'image', 'created_at',
+                  'characteristics', 'characteristics_display',
+                  'likes', 'likes_display' ]
         
 
 class PartnerProfileDetailSerializer(serializers.ModelSerializer):
     primary_profile = serializers.ReadOnlyField(source='primary_profile.username')
-    is_owner = serializers.SerializerMethodField()
+    is_primary_profile = serializers.SerializerMethodField()
     characteristics = serializers.PrimaryKeyRelatedField(
         many=True, queryset=Characteristic.objects.all(), write_only=True, required=False)
     characteristics_display = CharacteristicSerializer(many=True, read_only=True, source='characteristics')
+    likes = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=Like.objects.all(), write_only=True, required=False)
+    likes_display = LikeSerializer(many=True, read_only=True, source='likes')
 
-    def get_is_owner(self, obj):
+    def get_is_primary_profile(self, obj):
         request = self.context['request']
         return request.user == obj.primary_profile
     
     def update(self, instance, validated_data):
         characteristics = validated_data.pop('characteristics', None)
+        likes = validated_data.pop('likes', None)
+
         if characteristics is not None:
             instance.characteristics.set(characteristics)
+        if likes is not None:
+            instance.likes.set(likes)
+
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
@@ -42,7 +59,7 @@ class PartnerProfileDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = PartnerProfile
         fields = [
-            'is_owner', 'id', 'primary_profile',
+            'is_primary_profile', 'id', 'primary_profile',
             'name', 'about', 'image',
             'created_at', 'characteristics', 'characteristics_display', 
-            ]
+            'likes', 'likes_display' ]

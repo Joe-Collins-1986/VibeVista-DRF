@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     'partner_profile',
     'likes',
     'characteristics',
+    'passions',
 
 ]
 

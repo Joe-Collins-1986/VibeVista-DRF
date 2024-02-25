@@ -19,4 +19,5 @@ urlpatterns = [
     path('partner-profile/', include('partner_profile.urls')),
     path('partner-characteristics/', include('characteristics.urls')),
     path('partner-likes/', include('likes.urls')),
+    path('partner-passions/', include('passions.urls')),
 ]

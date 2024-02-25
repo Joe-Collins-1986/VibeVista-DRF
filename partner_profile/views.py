@@ -1,7 +1,9 @@
 from rest_framework import generics
 from main.permissions import IsPrimaryProfileOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 from .models import PartnerProfile
 from .serializers import PartnerProfileListSerializer, PartnerProfileDetailSerializer
+
 
 
 class PartnerProfileList(generics.ListCreateAPIView):
@@ -9,7 +11,11 @@ class PartnerProfileList(generics.ListCreateAPIView):
     - List out all the partner profiles
     """
     serializer_class = PartnerProfileListSerializer
-    queryset = PartnerProfile.objects.all().order_by('-created_at')
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return PartnerProfile.objects.filter(primary_profile=user).order_by('-created_at')
     
 
 class PartnerProfileDetail(generics.RetrieveUpdateAPIView):
@@ -20,5 +26,8 @@ class PartnerProfileDetail(generics.RetrieveUpdateAPIView):
     to ensure only owner can update partner profile info
     """
     serializer_class = PartnerProfileDetailSerializer
-    permission_classes = [IsPrimaryProfileOrReadOnly]
-    queryset = PartnerProfile.objects.all().order_by('-created_at')
+    permission_classes = [IsAuthenticated, IsPrimaryProfileOrReadOnly]
+
+    def get_queryset(self):
+        user = self.request.user
+        return PartnerProfile.objects.filter(primary_profile=user).order_by('-created_at')

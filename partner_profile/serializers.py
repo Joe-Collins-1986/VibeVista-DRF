@@ -4,6 +4,7 @@ from characteristics.models import Characteristic
 from characteristics.serializers import CharacteristicSerializer
 from likes.models import Like
 from likes.serializers import LikeSerializer
+from passions.serializers import PassionSerializer
 
 class PartnerProfileListSerializer(serializers.ModelSerializer):
     characteristics = serializers.PrimaryKeyRelatedField(
@@ -13,6 +14,8 @@ class PartnerProfileListSerializer(serializers.ModelSerializer):
     likes = serializers.PrimaryKeyRelatedField(
         many=True, queryset=Like.objects.all(), write_only=True, required=False)
     likes_display = LikeSerializer(many=True, read_only=True, source='likes')
+
+    passions = PassionSerializer(many=True, read_only=True)
 
     is_primary_profile = serializers.SerializerMethodField()
 
@@ -25,7 +28,7 @@ class PartnerProfileListSerializer(serializers.ModelSerializer):
         fields = ['is_primary_profile', 'id', 'primary_profile',
                   'name', 'about', 'image', 'created_at',
                   'characteristics', 'characteristics_display',
-                  'likes', 'likes_display' ]
+                  'likes', 'likes_display', 'passions' ]
         
 
 class PartnerProfileDetailSerializer(serializers.ModelSerializer):
@@ -37,6 +40,7 @@ class PartnerProfileDetailSerializer(serializers.ModelSerializer):
     likes = serializers.PrimaryKeyRelatedField(
         many=True, queryset=Like.objects.all(), write_only=True, required=False)
     likes_display = LikeSerializer(many=True, read_only=True, source='likes')
+    passions = PassionSerializer(many=True, read_only=True)
 
     def get_is_primary_profile(self, obj):
         request = self.context['request']
@@ -62,4 +66,4 @@ class PartnerProfileDetailSerializer(serializers.ModelSerializer):
             'is_primary_profile', 'id', 'primary_profile',
             'name', 'about', 'image',
             'created_at', 'characteristics', 'characteristics_display', 
-            'likes', 'likes_display' ]
+            'likes', 'likes_display', 'passions' ]

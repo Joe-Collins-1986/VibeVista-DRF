@@ -17,7 +17,7 @@ class PassionListSerializer(serializers.ModelSerializer):
 
 class PassionSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
-    partner_profile = serializers.ReadOnlyField(source='partner_profile.username')
+    partner_profile = serializers.ReadOnlyField(source='partner_profile.name')
     is_owner = serializers.SerializerMethodField()
 
     def get_is_owner(self, obj):
@@ -26,5 +26,5 @@ class PassionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Passion
-        fields = ['owner', 'id', 'partner_profile',
+        fields = ['partner_profile', 'owner', 'id', 
                   'passion_text', 'is_owner',]

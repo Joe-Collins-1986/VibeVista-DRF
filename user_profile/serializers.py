@@ -10,7 +10,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
     Get function to set is_owner to true/false
     """
     owner = serializers.ReadOnlyField(source='owner.username')
-    bio = serializers.ReadOnlyField()
 
     is_owner = serializers.SerializerMethodField()
 

@@ -21,6 +21,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = UserProfile
         fields = [
             'is_owner', 'id', 'owner',
-            'created_at', 'bio', 'image',
+            'bio', 'image', 'active_partner_profile_id',
             'created_at',
         ]

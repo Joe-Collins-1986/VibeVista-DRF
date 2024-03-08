@@ -4,15 +4,14 @@ from django_resized import ResizedImageField
 from likes.models import Like
 from characteristics.models import Characteristic
 
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MaxValueValidator
 from django.utils.timezone import now
 
-def current_year():
-    return now().year
+def current_date():
+    return now().date()
 
-year_of_birth_validator = [
-    MaxValueValidator(limit_value=current_year, message="Year of birth cannot be in the future."),
-    MinValueValidator(limit_value=1000, message="Year must be a four-digit number.")
+date_of_birth_validator = [
+    MaxValueValidator(limit_value=current_date, message="DOB cannot be in the future."),
 ]
 
 
@@ -25,9 +24,8 @@ class PartnerProfile(models.Model):
     name = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     relationship = models.CharField(max_length=50, default='Partner')
-    year_of_birth = models.IntegerField(
-        validators=year_of_birth_validator,
-        help_text="Please enter a four-digit year format.",
+    date_of_birth = models.DateField(
+        validators=date_of_birth_validator,
         blank=True,
         null=True,
     )

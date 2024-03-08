@@ -26,7 +26,7 @@ class PartnerProfileListSerializer(serializers.ModelSerializer):
     class Meta:
         model = PartnerProfile
         fields = ['is_primary_profile', 'id', 'primary_profile',
-                  'name', 'relationship', 'year_of_birth', 'gender',
+                  'name', 'relationship', 'date_of_birth', 'gender',
                   'image', 'created_at',
                   'characteristics', 'characteristics_display',
                   'likes', 'likes_display', 'passions' ]
@@ -65,6 +65,6 @@ class PartnerProfileDetailSerializer(serializers.ModelSerializer):
         model = PartnerProfile
         fields = [
             'is_primary_profile', 'id', 'primary_profile',
-            'name', 'relationship', 'year_of_birth', 'gender', 'image',
+            'name', 'relationship', 'date_of_birth', 'gender', 'image',
             'created_at', 'characteristics', 'characteristics_display', 
             'likes', 'likes_display', 'passions' ]

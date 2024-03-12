@@ -18,7 +18,7 @@ class PassionList(generics.ListCreateAPIView):
         return Passion.objects.filter(owner=user)
     
 
-class PassionDetail(generics.RetrieveUpdateAPIView):
+class PassionDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     - Detail the specificly requested partner profile
     - Uses same Partner Profile serializer
